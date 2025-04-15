@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Сотрудник обновлен</title>
+</head>
+<body>
+
+<br>
+<a href="/admin">к списку пользователей</a>
+
+<div>
+    <h1>Сотрудник был успешно изменен!</h1>
+    <p th:text="'ID номер сотрудника: ' + ${personUpdated}"></p>
+</div>
+</body>
+</html>

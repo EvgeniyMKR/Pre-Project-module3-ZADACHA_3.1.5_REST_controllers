@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Мой профиль</title>
+</head>
+<body>
+<h1>--Spring_Boot_Security--</h1>
+<a href="/">На главную</a>
+<br>
+
+
+
+<hr>
+<div>
+    <h1>Мой профиль</h1>
+    <p>
+        <strong>Мой id номер: </strong> <span th:text="${person.getId()}"></span>
+    </p>
+    <p>
+        <strong>Имя: </strong> <span th:text="${person.getPersonName()}"></span>
+    </p>
+    <p>
+        <strong>Уровень доступа: </strong> <span th:text="${person.getRoles()}"></span>
+    </p>
+</div>
+<br>
+<a sec:authorize="hasRole('ROLE_ADMIN')" href="admin">к списку пользователей</a>
+<hr>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit" class="btn btn-link">Выйти из профиля</button>
+</form>
+
+</body>
+
+</html>

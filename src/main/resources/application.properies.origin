@@ -1,0 +1,12 @@
+spring.application.name=MySBS_app
+
+#Database properties
+spring.datasource.driver-class-name=(класс драйвер вашей СУБД)
+spring.datasource.url=(URL + схема)?allowPublicKeyRetrieval=true&verifyServerCertificate=false&useSSL=false&requireSSL=false&useLegacyDatetimeCode=false&amp&serverTimezone=UTC
+spring.datasource.username=(пользователь)
+spring.datasource.password=(пароль)
+
+#Hibernate properties
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.dialect=(Диалект вашей СУБД)

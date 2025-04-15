@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список сотрудников</title>
+</head>
+<body>
+<a href="/">На главную</a>
+<br>
+<a href="/user">Мой профиль</a>
+
+<h1>Не найдено ни одного сотрудника</h1>
+<img src="https://sun9-87.userapi.com/impg/gXJ57s8rKsBsUK6tgP9zyOJxtzm-SQEq6mdV2A/uT2WGEz8RW0.jpg?size=604x419&quality=96&sign=0b24e17043da806b0e6ceb95283b31ed&type=album"
+     alt="картинка">
+
+<form method="post" action="admin/create">
+
+    <label for="personName">Имя</label>
+    <input name="personName" type="text" id="personName" required>
+    <br>
+
+    <label for="password">Пароль</label>
+    <input name="password" type="text" id="password" required>
+    <br>
+
+    <label for="roles">Уровень доступа</label>
+    <select name="roles"  id="roles" required>
+        <option value="" disabled selected>назначить уровень</option>
+        <option value="ROLE_ADMIN">ADMIN</option>
+        <option value="ROLE_USER">USER</option>
+    </select>
+    <br>
+    <br>
+    <input type="submit" value="Зарегистрировать нового пользователя">
+</form>
+
+</body>
+
+</html>
