@@ -31,10 +31,6 @@ public class AdminController {
     @PostMapping("/create")
     public String createUser(@ModelAttribute Person newPerson, ModelMap model) {
 
-        newPerson.getRoles().forEach(role -> {
-            System.err.println(role.toString());
-        });
-
         try {
             personService.create(newPerson);
             model.addAttribute("newPerson", newPerson); // для таймлифа
@@ -67,15 +63,11 @@ public class AdminController {
 
     @PostMapping("/update")
     public String updateUser(@ModelAttribute Person person, ModelMap model) {
-        person.getRoles().forEach(role -> {
-            System.err.println(role.toString());
-        });
 
         personService.update(person.getId(), person);
         model.addAttribute("personUpdated", person.getId());
 
         return "/admin/personUpdated";
     }
-
 
 }

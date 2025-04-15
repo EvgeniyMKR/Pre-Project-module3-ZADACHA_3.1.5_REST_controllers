@@ -79,7 +79,6 @@ public class PersonServiceImpl implements PersonService {
             }
 
             personUpdate.setRolesByRoleName(roleUpdate); // обновляю роль юзеру из БД
-            System.err.println(person.getRoles());
 
             personUpdate.setPersonName(person.getPersonName()); // обновляю имя юзеру из БД
             personUpdate.setPassword(person.getPassword()); // обновляю пароль
