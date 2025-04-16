@@ -52,7 +52,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    @Transactional
+    @Transactional (readOnly = true)
     public List<Person> readPersons() {
         return personDao.readPersons();
     }
@@ -100,6 +100,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Person> findByPersonName(String personName) {
         return personDao.findByPersonName(personName);
     }

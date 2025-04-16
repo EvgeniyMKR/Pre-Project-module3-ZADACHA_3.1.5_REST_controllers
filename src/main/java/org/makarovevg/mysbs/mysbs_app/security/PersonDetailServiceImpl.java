@@ -24,10 +24,9 @@ public class PersonDetailServiceImpl implements UserDetailsService {
 
     //  в этом методе мы загружаем из БД нашего Person по имени, если таковой есть то возвращаем, если нет исключение
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<Person> userDataBase = personService.findByPersonName(username); // достаём из БД пользователя по имени
+        Optional<Person> userDataBase = personService.findByPersonName(username); // достаём из БД пользователя по имени + ЕГО РОЛИ Использует @EntityGraph
         return new PersonDetails(userDataBase.orElseThrow(() ->
                 new UsernameNotFoundException("Пользователь с именем \"" + username + "\" не найден!")));  // исключение ловит спринг и показывает на странице логина
 

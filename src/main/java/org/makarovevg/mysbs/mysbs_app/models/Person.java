@@ -1,8 +1,9 @@
 package org.makarovevg.mysbs.mysbs_app.models;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.*;
 
 import java.util.*;
 
@@ -23,7 +24,8 @@ public class Person {
     @Column(name = "password", nullable = false, unique = true)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER) // Роли загружаются сразу c Person в одной транзакции
+    @ManyToMany(fetch = FetchType.LAZY)  // Ленивая загрузка этой СУЩНОСТи по умолчанию
+    @Fetch(FetchMode.JOIN)  // Загружает Сущность  JOIN-запросом в одной транзакции при Lazy!
     @JoinTable(
             name = "person_role", // связующая таблица, указываем явно для читабельности
             joinColumns = @JoinColumn(name = "person_id"), // внешний ключ со стороны Person

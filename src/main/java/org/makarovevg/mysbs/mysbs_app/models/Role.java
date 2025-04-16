@@ -3,6 +3,8 @@ package org.makarovevg.mysbs.mysbs_app.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import java.util.*;
 
@@ -20,7 +22,8 @@ public class Role implements GrantedAuthority {
     @Column(name = "role_name", unique = true, nullable = false)
     private String roleName;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles" ,cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Person> persons = new HashSet<>();
 
     public Role(String roleName) {

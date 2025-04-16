@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.makarovevg.mysbs.mysbs_app.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -76,6 +77,7 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     @Override
+    @EntityGraph(attributePaths = "roles") // Явно указываем загрузить роли  этом методе для Security!!
     public Optional<Person> findByPersonName(String personName) {
 
         return Optional.of(entityManager.createQuery("from Person u where u.personName = :personName", Person.class)
