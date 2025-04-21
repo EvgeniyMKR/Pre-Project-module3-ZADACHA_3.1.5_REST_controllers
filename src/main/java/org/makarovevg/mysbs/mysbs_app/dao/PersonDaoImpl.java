@@ -35,6 +35,8 @@ public class PersonDaoImpl implements PersonDao {
                 .orElse(null);
 
         if (newPerson == null) {
+            person.setOriginalPassword(person.getPassword());
+
             person.setPassword(passwordEncoder.encode(person.getPassword()));
             entityManager.persist(person);
         } else {
@@ -52,9 +54,10 @@ public class PersonDaoImpl implements PersonDao {
     @Override
     public void update(long id, Person person) {
 
-        entityManager.createQuery("update Person u set  u.personName = :personName, u.password = :password where u.id = :id")
+        entityManager.createQuery("update Person u set  u.personName = :personName, u.password = :password, u.originalPassword=:originalPassword where u.id = :id")
                 .setParameter("personName", person.getPersonName())
                 .setParameter("password", passwordEncoder.encode(person.getPassword()))
+                .setParameter("originalPassword", person.getOriginalPassword())
                 .setParameter("id", person.getId())
                 .executeUpdate();
     }

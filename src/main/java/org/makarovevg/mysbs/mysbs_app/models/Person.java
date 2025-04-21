@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.*;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.*;
 
@@ -24,6 +26,9 @@ public class Person {
     @Column(name = "password", nullable = false, unique = true)
     private String password;
 
+    @Column(name = "original_password")
+    private String originalPassword;
+
     @ManyToMany(fetch = FetchType.LAZY)  // Ленивая загрузка этой СУЩНОСТи по умолчанию
     @Fetch(FetchMode.JOIN)  // Загружает Сущность  JOIN-запросом в одной транзакции при Lazy!
     @JoinTable(
@@ -43,6 +48,10 @@ public class Person {
     public void setRolesByRoleName(Role... roles) {
         this.roles.clear();
         Collections.addAll(this.roles, roles);
+    }
+
+    public String getOriginalPassword() {
+        return this.originalPassword.substring(0, 2) + "*****";
     }
 
     @Override

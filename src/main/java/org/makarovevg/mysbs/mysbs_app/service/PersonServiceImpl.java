@@ -48,6 +48,7 @@ public class PersonServiceImpl implements PersonService {
 
         } catch (RuntimeException e) {
             System.err.println(e.getMessage());
+            throw e;
         }
     }
 
@@ -82,6 +83,8 @@ public class PersonServiceImpl implements PersonService {
 
             personUpdate.setPersonName(person.getPersonName()); // обновляю имя юзеру из БД
             personUpdate.setPassword(person.getPassword()); // обновляю пароль
+
+            personUpdate.setOriginalPassword(person.getPassword()); // Для отображения исходного пароля на сайте, по факту - лишее!
 
             personDao.update(id, personUpdate); // теперь нужно в рамках транзакции этой ОБНОВИТЬ в самой БД его данные
 

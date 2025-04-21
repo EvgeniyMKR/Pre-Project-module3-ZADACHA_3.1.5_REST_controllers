@@ -22,7 +22,8 @@ public class UserController {
         //вытаскиваем из принципал (объект успешной аутентификации, содержащий пользователя) нашего персона
         PersonDetails person = (PersonDetails) authentication.getPrincipal();
 
-        model.addAttribute("person", person.getPerson());
+        model.addAttribute("personAuth", person.getPerson());
+        model.addAttribute("personInfo", person.getPerson());
 
         return "user/userPage";
     }
