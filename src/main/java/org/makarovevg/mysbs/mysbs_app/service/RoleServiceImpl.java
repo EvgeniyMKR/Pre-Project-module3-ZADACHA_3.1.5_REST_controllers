@@ -39,7 +39,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Optional<Role> findByRoleName(String roleName) {
 
         return roleDao.findByRoleName(roleName);

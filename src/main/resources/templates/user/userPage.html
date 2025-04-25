@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"  lang="en">
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Page</title>
+    <title>User</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -55,33 +55,26 @@
 
 <body>
 
-
 <!-- Верхняя строка с информацией о пользователе и его роли (ШАПКА) -->
-<div class="top-bar d-flex justify-content-between align-items-center">
-    <div>
-        Мое имя:
-        <span class="fw-bold" th:text="${personAuth.getPersonName()}">___</span>
-        <br>
-        <span>Уровень доступа:</span>
-        <th:block th:each="role : ${personAuth.getRoles()}">
-            <span class="badge bg-primary" th:text="${role}">___</span>
-        </th:block>
+<div class="top-bar d-flex justify-content-between align-items-center" id="userInfoHeader">
+    <div id="userInfoContainer">
+        <!-- Здесь будет динамически вставлена информация о пользователе -->
+        Загрузка данных пользователя...
     </div>
     <div>
         <br>
-        <form th:action="@{/logout}" method="post">
-            <button type="submit" class="btn btn-link text-white text-decoration p-0">Выйти из профиля</button>
-        </form>
+        <button id="logoutBtn" class="btn btn-link text-white text-decoration p-0">Выйти из профиля</button>
     </div>
 </div>
 
 
-<!-- ЛЕВАЯ ЧАСТЬ -->
+<!-- ЛЕВАЯ ЧАСТЬ сайдбар и контент -->
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
         <div class="col-md-3 col-lg-2 sidebar">
             <ul class="nav flex-column">
+
                 <li class="nav-item">
                     <a class="nav-link active" href="#" id="userInfoLink">
                         Мой профиль
@@ -94,55 +87,27 @@
         <!-- Main content -->
         <div class="col-md-9 col-lg-10 main-content">
 
-
-            <!-- ИНФОРМАЦИЯ О ЮЗЕРЕ вкладка слева, ОТОБРАЗИТЬСЯ ПРИ НАЖАТИИ на "мой профиль" -->
+            <!-- Секция информации о пользователе -->
             <div id="userInfoSection" style="display: none;">
                 <h2 class="mb-4">Мои данные</h2>
-
                 <div class="card">
                     <div class="card-body">
-                        <div class="d-flex flex-wrap align-items-center gap-3">
-                            <!-- ID -->
-                            <div class="d-flex align-items-center">
-                                <h5 class="mb-0 me-2">ID:</h5>
-                                <span class="text-muted" th:text="${personInfo.getId()}"></span>
-                            </div>
-
-                            <!-- Имя -->
-                            <div class="d-flex align-items-center">
-                                <h5 class="mb-0 me-2">Имя:</h5>
-                                <span class="text-muted" th:text="${personInfo.getPersonName()}"></span>
-                            </div>
-
-                            <!-- Пароль -->
-                            <div class="d-flex align-items-center">
-                                <h5 class="mb-0 me-2">Пароль:</h5>
-                                <span class="text-muted" th:text="${personInfo.getOriginalPassword()}"></span>
-                            </div>
-
-                            <!-- Уровень доступа -->
-                            <div class="d-flex align-items-center">
-                                <h5 class="mb-0 me-1">Уровень доступа:</h5>
-                                <div class="d-flex gap-1">
-                                    <th:block th:each="role : ${personAuth.getRoles()}">
-                                        <span class="badge bg-primary" th:text="${role}"></span>
-                                    </th:block>
-                                </div>
+                        <div class="d-flex flex-wrap align-items-center gap-3" id="userInfoContent">
+                            <!-- Данные будут загружены через JavaScript -->
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Загрузка...</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-
         </div>
     </div>
 </div>
 
 
-<!-- Bootstrap JS and dependencies -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+<!--скрипт панели слева  только ФУНКЦИОНАЛ КНОПОК, разделение контента-->
 <script>
     document.getElementById('userInfoLink').addEventListener('click', function (e) {
         e.preventDefault();
@@ -151,6 +116,216 @@
         document.getElementById('userInfoLink').classList.remove('active');
     });
 </script>
+
+<!--Скрипты для REST-->
+<!--_____________________________________________________-->
+
+<!--скрипт для верхней шапки-->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // 1. Загрузка информации о текущем пользователе
+        fetch('/api/auth/auth_person')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Не удалось загрузить данные пользователя');
+                }
+                return response.json();
+            })
+            .then(user => {
+                renderUserInfo(user);
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                document.getElementById('userInfoContainer').innerHTML =
+                    '<div class="text-danger">Ошибка загрузки данных пользователя</div>';
+            });
+
+        // 2. Обработка выхода
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            fetch('/api/auth/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Перенаправляем на страницу входа после успешного выхода
+                        window.location.href = '/';
+                    } else {
+                        throw new Error('Ошибка при выходе');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка выхода:', error);
+                    alert('Не удалось выполнить выход');
+                });
+        });
+    });
+
+    // Функция для отображения информации о пользователе
+    function renderUserInfo(user) {
+        const userInfoContainer = document.getElementById('userInfoContainer');
+
+        // Создаем HTML для ролей
+        // const rolesHtml = user.roles.map(role =>
+        //     `<span class="badge bg-primary">${role}</span>`
+        // ).join(' ');
+
+        // Преобразуем Set ролей в массив и извлекаем нужное свойство
+        const rolesHtml = Array.from(user.roles || [])
+            .map(role => {
+                // Если роль - объект, берем свойство name или authority
+                const roleName = role.roleName.substring(5) || role.authority || role;
+                return `<span class="badge bg-primary me-1">${roleName}</span>`;
+            })
+            .join('') || '';
+
+
+        // Вставляем информацию в контейнер
+        userInfoContainer.innerHTML = `
+        Мое имя: <span class="fw-bold">${escapeHtml(user.personName)}</span>
+        <br>
+        <span>Уровень доступа:</span>
+        ${rolesHtml}
+    `;
+    }
+
+
+    // Функция для экранирования HTML (защита от XSS)
+    function escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+</script>
+
+<!--Скрипт панели СЛЕВА, данные О себе -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Обработчик клика по ссылке "Мой профиль"
+        document.getElementById('userInfoLink').addEventListener('click', function (e) {
+            e.preventDefault();
+
+            // Показываем секцию с информацией о пользователе
+            document.getElementById('userInfoSection').style.display = 'block';
+
+            // Загружаем данные пользователя
+            loadUserInfo();
+        });
+    });
+
+    // Функция загрузки информации о пользователе
+    function loadUserInfo() {
+        const userInfoContent = document.getElementById('userInfoContent');
+
+        // Показываем индикатор загрузки
+        userInfoContent.innerHTML = `
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Загрузка...</span>
+        </div>
+    `;
+
+        // Отправляем запрос к REST API
+        fetch('/api/auth/auth_person')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка загрузки данных');
+                }
+                return response.json();
+            })
+            .then(user => {
+
+                // Формируем HTML с данными пользователя
+                // Преобразуем Set ролей в массив и извлекаем нужное свойство
+                const rolesHtml = Array.from(user.roles || [])
+                    .map(role => {
+                        // Если роль - объект, берем свойство name или authority
+                        const roleName = role.roleName.substring(5) || role.authority || role;
+                        return `<span class="badge bg-primary me-1">${roleName}</span>`;
+                    })
+                    .join('') || '';
+
+
+                userInfoContent.innerHTML = `
+                <!-- ID -->
+                <div class="d-flex align-items-center">
+                    <h5 class="mb-0 me-2">ID:</h5>
+                    <span class="text-muted">${escapeHtml(user.id.toString())}</span>
+                </div>
+
+                <!-- Имя -->
+                <div class="d-flex align-items-center">
+                    <h5 class="mb-0 me-2">Имя:</h5>
+                    <span class="text-muted">${escapeHtml(user.personName)}</span>
+                </div>
+
+                <!-- Пароль -->
+                <div class="d-flex align-items-center">
+                    <h5 class="mb-0 me-2">Пароль:</h5>
+                    <span class="text-muted">${escapeHtml(user.password)}</span>
+                </div>
+
+                <!-- Уровень доступа -->
+                <div class="d-flex align-items-center">
+                    <h5 class="mb-0 me-1">Уровень доступа:</h5>
+                    <div class="d-flex gap-1">
+                        ${rolesHtml}
+                    </div>
+                </div>
+            `;
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                userInfoContent.innerHTML = `
+                <div class="alert alert-danger">
+                    Не удалось загрузить данные пользователя: ${escapeHtml(error.message)}
+                </div>
+            `;
+            });
+    }
+
+    // Функция для экранирования HTML (защита от XSS)
+    function escapeHtml(unsafe) {
+        if (!unsafe) return '';
+        return unsafe.toString()
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+</script>
+<!--_____________________________________________________-->
+
+
+<!-- Bootstrap JS Bundle с Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Toast контейнер (лучше разместить в конце body) -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+    <!-- Toast для ошибок -->
+    <div id="errorToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-danger text-white">
+            <strong class="me-auto">Ошибка!!!</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body"></div>
+    </div>
+
+    <!-- Toast для успеха -->
+    <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-success text-white">
+            <strong class="me-auto">Успех!</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body"></div>
+    </div>
+</div>
 
 </body>
 </html>

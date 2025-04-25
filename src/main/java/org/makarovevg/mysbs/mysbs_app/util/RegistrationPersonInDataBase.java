@@ -6,7 +6,6 @@ import org.makarovevg.mysbs.mysbs_app.models.Role;
 import org.makarovevg.mysbs.mysbs_app.service.PersonService;
 import org.makarovevg.mysbs.mysbs_app.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component

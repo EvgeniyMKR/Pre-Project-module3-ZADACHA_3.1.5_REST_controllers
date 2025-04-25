@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -30,6 +29,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth    // ТУТ НАСТРОЙКА ДОСТУПА к URLам кому и как
                         .requestMatchers("/").permitAll() //доступны всем, без аутентификации
+                        .requestMatchers("/auth/**").permitAll() // REST контроллер для текущего пользователя и разлогинивания
                         .requestMatchers("/user").hasAnyRole("USER", "ADMIN") //доступны юзерам  и админам (автоматически добавляет префикс "ROLE_")
                         .requestMatchers("/admin/**").hasRole("ADMIN") //доступны админам  (автоматически добавляет префикс "ROLE_")
                         .anyRequest().authenticated() // все остальные запросы требуют аутентификации
@@ -37,7 +37,7 @@ public class WebSecurityConfig {
                 .formLogin(form -> form  // ТУТ НАСТРОЙКА входа дефолтная форма аутентификации
                         // .loginPage("/login") // если ипользуем кастомную форму входа
                         .successHandler(successUserHandler) // перенаправление после успешного входа через отдельный класс
-                       //.defaultSuccessUrl("/user")// перенаправление после успешного входа  ИСПОЛЬЗУЕТСЯ ДЕФОЛТНАЯ!
+                        //.defaultSuccessUrl("/user")// перенаправление после успешного входа  ИСПОЛЬЗУЕТСЯ ДЕФОЛТНАЯ!
                         .permitAll() // доступ к странице входа без аутентификации
                 )
                 .logout(logout -> logout

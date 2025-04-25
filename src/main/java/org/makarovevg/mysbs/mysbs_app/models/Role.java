@@ -1,6 +1,7 @@
 package org.makarovevg.mysbs.mysbs_app.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -22,8 +23,10 @@ public class Role implements GrantedAuthority {
     @Column(name = "role_name", unique = true, nullable = false)
     private String roleName;
 
+
     @ManyToMany(mappedBy = "roles" ,cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Set<Person> persons = new HashSet<>();
 
     public Role(String roleName) {

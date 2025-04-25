@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.*;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.util.*;
 
@@ -36,6 +35,7 @@ public class Person {
             joinColumns = @JoinColumn(name = "person_id"), // внешний ключ со стороны Person
             inverseJoinColumns = @JoinColumn(name = "role_id") // внешний ключ со стороны Role
     )
+
     private Set<Role> roles = new HashSet<>();
 
 

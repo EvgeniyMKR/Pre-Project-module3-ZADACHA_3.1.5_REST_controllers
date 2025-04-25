@@ -8,10 +8,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfig implements WebMvcConfigurer {
 
     // данный метод возвращает Публичное представление для всех пользователей, главная публичная страница приложения
+    // регистрируем статичные страницы без контроллеров
     public void addViewControllers(ViewControllerRegistry registry) {
         registry
                 //тут условный контроллер БЕЗ ЛОГИКИ, который просто возвращает представление для всех, пришедших на сайт
                 .addViewController("/")
                 .setViewName("publicPage");
+
+        registry
+                .addViewController("/admin")
+                .setViewName("admin/adminPage");
+
+        registry
+                .addViewController("/user")
+                .setViewName("user/userPage");
     }
 }
