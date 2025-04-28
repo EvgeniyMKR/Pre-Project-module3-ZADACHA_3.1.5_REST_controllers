@@ -80,10 +80,10 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     @Override
-    @EntityGraph(attributePaths = "roles") // Явно указываем загрузить роли  этом методе для Security!!
+//    @EntityGraph(attributePaths = "roles") // Явно указываем загрузить роли  этом методе для Security!! УКАЗАЛИ ЯВНО в запросе, для одного случая
     public Optional<Person> findByPersonName(String personName) {
 
-        return Optional.of(entityManager.createQuery("from Person u where u.personName = :personName", Person.class)
+        return Optional.of(entityManager.createQuery("from Person u LEFT JOIN FETCH u.roles where u.personName = :personName", Person.class)
                 .setParameter("personName", personName)
                 .getSingleResult());
 

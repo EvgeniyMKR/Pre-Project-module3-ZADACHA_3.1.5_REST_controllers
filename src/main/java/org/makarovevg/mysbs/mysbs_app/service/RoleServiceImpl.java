@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.logging.Logger;
 
 @Service
@@ -38,10 +37,4 @@ public class RoleServiceImpl implements RoleService {
         log.info("Роль успешно удалена: " + id);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<Role> findByRoleName(String roleName) {
-
-        return roleDao.findByRoleName(roleName);
-    }
 }

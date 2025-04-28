@@ -1,7 +1,6 @@
 package org.makarovevg.mysbs.mysbs_app.service;
 
 import org.makarovevg.mysbs.mysbs_app.models.Role;
-import java.util.Optional;
 
 
 public interface RoleService {
@@ -10,5 +9,4 @@ public interface RoleService {
 
     void delete(long id);
 
-    Optional<Role> findByRoleName(String roleName);
 }

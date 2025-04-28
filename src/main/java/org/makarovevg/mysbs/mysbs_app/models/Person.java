@@ -3,7 +3,7 @@ package org.makarovevg.mysbs.mysbs_app.models;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.*;
+
 
 
 import java.util.*;
@@ -29,7 +29,7 @@ public class Person {
     private String originalPassword;
 
     @ManyToMany(fetch = FetchType.LAZY)  // Ленивая загрузка этой СУЩНОСТи по умолчанию
-    @Fetch(FetchMode.JOIN)  // Загружает Сущность  JOIN-запросом в одной транзакции при Lazy!
+//    @Fetch(FetchMode.JOIN)  // Загружает Сущность  JOIN-запросом в одной транзакции при Lazy! // заменен на ЯВНЫЙ запрос
     @JoinTable(
             name = "person_role", // связующая таблица, указываем явно для читабельности
             joinColumns = @JoinColumn(name = "person_id"), // внешний ключ со стороны Person
